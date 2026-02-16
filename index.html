@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMXX Compiler - Professional Online Compiler</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text: #f1f5f9;
+            --text-dim: #94a3b8;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 1.2em;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 30px;
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .plugin-item {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .plugin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 200px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .compile-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .result-item {
+            background: var(--bg-dark);
+            border: 2px solid;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .result-success {
+            border-color: var(--success);
+        }
+
+        .result-error {
+            border-color: var(--danger);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-error {
+            background: var(--danger);
+            color: white;
+        }
+
+        .error-list, .warning-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .error-item, .warning-item {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .error-item {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid var(--danger);
+        }
+
+        .warning-item {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 3px solid var(--warning);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-dark);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 0.9em;
+        }
+
+        .download-section {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .download-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .info-box {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-box strong {
+            color: var(--primary);
+        }
+
+        .include-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .include-item {
+            background: var(--bg-dark);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .log-container {
+            background: var(--bg-dark);
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+
+        .rate-limit-info {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ AMXX Compiler</h1>
+            <p class="subtitle">Professional AMX Mod X Plugin Compiler | Fast • Reliable • Easy</p>
+        </header>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h3>Batch Compile</h3>
+                <p>Compile up to 10 plugins at once</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>Custom Includes</h3>
+                <p>10 custom .inc files per request</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Unlimited Size</h3>
+                <p>No file size restrictions</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📥</div>
+                <h3>ZIP Download</h3>
+                <p>Download all compiled plugins as ZIP</p>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="panel">
+                <h2>🛠️ Compiler Settings</h2>
+                
+                <div class="info-box">
+                    <strong>Rate Limit:</strong> 10 compilations per 120 seconds<br>
+                    <strong>Timeout:</strong> 30 seconds per plugin<br>
+                    <strong>File Retention:</strong> 10 minutes
+                </div>
+
+                <div class="flex-between">
+                    <h3>Plugins</h3>
+                    <button onclick="addPlugin()" class="btn-small btn-success">+ Add Plugin</button>
+                </div>
+
+                <div id="plugins-container">
+                    <!-- Plugins will be added here -->
+                </div>
+
+                <div class="include-section">
+                    <div class="flex-between">
+                        <h3>Shared Includes</h3>
+                        <button onclick="addSharedInclude()" class="btn-small btn-success">+ Add Include</button>
+                    </div>
+                    <div id="shared-includes-container">
+                        <!-- Shared includes will be added here -->
+                    </div>
+                </div>
+
+                <button onclick="compile()" class="compile-btn" id="compile-btn">
+                    <span>🚀 Compile All Plugins</span>
+                </button>
+            </div>
+
+            <div class="panel">
+                <h2>📊 Stats</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-plugins">0</div>
+                        <div class="stat-label">Total Plugins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-includes">0</div>
+                        <div class="stat-label">Includes</div>
+                    </div>
+                </div>
+
+                <div id="rate-limit-warning" class="rate-limit-info hidden">
+                    <strong>⏱️ Rate Limit Active</strong><br>
+                    Please wait before compiling again.
+                </div>
+            </div>
+        </div>
+
+        <div id="results-section" class="hidden">
+            <div class="panel">
+                <h2>📋 Compilation Results</h2>
+                <div id="summary-section"></div>
+                <div id="results-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let pluginCounter = 0;
+        let includeCounter = 0;
+        let sharedIncludeCounter = 0;
+
+        // Initialize with one plugin
+        window.onload = function() {
+            addPlugin();
+        };
+
+        function addPlugin() {
+            pluginCounter++;
+            const container = document.getElementById('plugins-container');
+            const pluginId = `plugin-${pluginCounter}`;
+            
+            const pluginHtml = `
+                <div class="plugin-item" id="${pluginId}">
+                    <div class="plugin-header">
+                        <h4>Plugin ${pluginCounter}</h4>
+                        <button onclick="removePlugin('${pluginId}')" class="btn-small btn-danger">Remove</button>
+                    </div>
+                    <input type="text" placeholder="Plugin Name (e.g., my_plugin)" id="${pluginId}-name" value="plugin_${pluginCounter}">
+                    <textarea placeholder="Paste your AMX Mod X source code here..." id="${pluginId}-code">#include <amxmodx>
+
+public plugin_init() {
+    register_plugin("My Plugin", "1.0", "Author");
+}</textarea>
+                    <div class="flex-between">
+                        <strong>Custom Includes (Optional)</strong>
+                        <button onclick="addPluginInclude('${pluginId}')" class="btn-small btn-success">+ Add Include</button>
+                    </div>
+                    <div id="${pluginId}-includes"></div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', pluginHtml);
+            updateStats();
+        }
+
+        function removePlugin(pluginId) {
+            const plugin = document.getElementById(pluginId);
+            if (plugin) {
+                plugin.remove();
+                updateStats();
+            }
+        }
+
+        function addPluginInclude(pluginId) {
+            includeCounter++;
+            const container = document.getElementById(`${pluginId}-includes`);
+            const includeId = `${pluginId}-inc-${includeCounter}`;
+            
+            const includeHtml = `
+                <div class="include-item" id="${includeId}">
+                    <div class="flex-between">
+                        <input type="text" placeholder="Filename (e.g., custom.inc)" id="${includeId}-name" style="width: 200px;">
+                        <button onclick="removeInclude('${includeId}')" class="btn-small btn-danger">Remove</button>
+                    </div>
+                    <textarea placeholder="Include file content..." id="${includeId}-content" style="min-height: 100px;"></textarea>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', includeHtml);
+            updateStats();
+        }
+
+        function addSharedInclude() {
+            sharedIncludeCounter++;
+            const container = document.getElementById('shared-includes-container');
+            const includeId = `shared-inc-${sharedIncludeCounter}`;
+            
+            const includeHtml = `
+                <div class="include-item" id="${includeId}">
+                    <div class="flex-between">
+                        <input type="text" placeholder="Filename (e.g., shared.inc)" id="${includeId}-name">
+                        <button onclick="removeInclude('${includeId}')" class="btn-small btn-danger">Remove</button>
+                    </div>
+                    <textarea placeholder="Include file content..." id="${includeId}-content" style="min-height: 100px;"></textarea>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', includeHtml);
+            updateStats();
+        }
+
+        function removeInclude(includeId) {
+            const include = document.getElementById(includeId);
+            if (include) {
+                include.remove();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            const plugins = document.querySelectorAll('.plugin-item').length;
+            const includes = document.querySelectorAll('.include-item').length;
+            
+            document.getElementById('total-plugins').textContent = plugins;
+            document.getElementById('total-includes').textContent = includes;
+        }
+
+        async function compile() {
+            const btn = document.getElementById('compile-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Compiling...';
+
+            // Collect plugins
+            const plugins = [];
+            const pluginItems = document.querySelectorAll('.plugin-item');
+            
+            pluginItems.forEach(item => {
+                const id = item.id;
+                const name = document.getElementById(`${id}-name`).value;
+                const code = document.getElementById(`${id}-code`).value;
+                
+                // Collect plugin-specific includes
+                const pluginIncludes = {};
+                const includeItems = item.querySelectorAll('.include-item');
+                includeItems.forEach(incItem => {
+                    const incId = incItem.id;
+                    const incName = document.getElementById(`${incId}-name`).value;
+                    const incContent = document.getElementById(`${incId}-content`).value;
+                    
+                    if (incName && incContent) {
+                        pluginIncludes[incName] = incContent;
+                    }
+                });
+                
+                plugins.push({
+                    name: name || `plugin_${plugins.length + 1}`,
+                    code: code,
+                    includes: pluginIncludes
+                });
+            });
+
+            // Collect shared includes
+            const sharedIncludes = {};
+            const sharedIncludeItems = document.querySelectorAll('#shared-includes-container .include-item');
+            sharedIncludeItems.forEach(item => {
+                const id = item.id;
+                const name = document.getElementById(`${id}-name`).value;
+                const content = document.getElementById(`${id}-content`).value;
+                
+                if (name && content) {
+                    sharedIncludes[name] = content;
+                }
+            });
+
+            // Make API request
+            try {
+                const response = await fetch('/compile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        plugins: plugins,
+                        includes: sharedIncludes
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayResults(data);
+                } else {
+                    alert(`Error: ${data.error}\n${data.message || ''}`);
+                    if (response.status === 429) {
+                        document.getElementById('rate-limit-warning').classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                alert(`Request failed: ${error.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>🚀 Compile All Plugins</span>';
+            }
+        }
+
+        function displayResults(data) {
+            const resultsSection = document.getElementById('results-section');
+            const summarySection = document.getElementById('summary-section');
+            const resultsContainer = document.getElementById('results-container');
+            
+            resultsSection.classList.remove('hidden');
+
+            // Display summary
+            const summary = data.summary;
+            let summaryHtml = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--success)">${summary.successful}</div>
+                        <div class="stat-label">Successful</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: var(--danger)">${summary.failed}</div>
+                        <div class="stat-label">Failed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${summary.total_plugins}</div>
+                        <div class="stat-label">Total Plugins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${summary.success_rate}</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                </div>
+            `;
+
+            // Add download button if available
+            if (data.download && data.download.available) {
+                summaryHtml += `
+                    <div class="download-section">
+                        <div class="download-icon">📦</div>
+                        <h3>Your plugins are ready!</h3>
+                        <p>Size: ${data.download.size_mb} MB</p>
+                        <p style="font-size: 0.9em; opacity: 0.8;">Expires in ${data.download.expires_in}</p>
+                        <button onclick="window.open('${data.download.url}', '_blank')" class="btn-success" style="margin-top: 15px; padding: 15px 40px; font-size: 18px;">
+                            📥 Download ZIP (${summary.successful} plugin${summary.successful > 1 ? 's' : ''})
+                        </button>
+                    </div>
+                `;
+            }
+
+            summarySection.innerHTML = summaryHtml;
+
+            // Display individual results
+            resultsContainer.innerHTML = '';
+            data.results.forEach(result => {
+                const resultHtml = `
+                    <div class="result-item ${result.success ? 'result-success' : 'result-error'}">
+                        <div class="result-header">
+                            <h3>${result.plugin}</h3>
+                            <span class="status-badge ${result.success ? 'badge-success' : 'badge-error'}">
+                                ${result.success ? '✓ Success' : '✗ Failed'}
+                            </span>
+                        </div>
+                        ${result.size ? `<p><strong>Size:</strong> ${(result.size / 1024).toFixed(2)} KB</p>` : ''}
+                        ${result.errors.length > 0 ? `
+                            <div class="error-list">
+                                <strong style="color: var(--danger);">Errors:</strong>
+                                ${result.errors.map(err => `
+                                    <div class="error-item">
+                                        Line ${err.line}: [${err.code}] ${err.message}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        ${result.warnings.length > 0 ? `
+                            <div class="warning-list">
+                                <strong style="color: var(--warning);">Warnings:</strong>
+                                ${result.warnings.map(warn => `
+                                    <div class="warning-item">
+                                        Line ${warn.line}: [${warn.code}] ${warn.message}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        ${result.log ? `
+                            <details style="margin-top: 15px;">
+                                <summary style="cursor: pointer; font-weight: bold;">View Compilation Log</summary>
+                                <div class="log-container">${result.log}</div>
+                            </details>
+                        ` : ''}
+                    </div>
+                `;
+                resultsContainer.insertAdjacentHTML('beforeend', resultHtml);
+            });
+
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
